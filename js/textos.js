@@ -71,12 +71,6 @@ window.TEXTOS = {
       "# También he tenido el privilegio de verte crecer."
     ],
     despues: [
-      "Han cambiado tus sueños.",
-      "Tu forma de pensar.",
-      "Tus gustos.",
-      "Tus preocupaciones.",
-      "Incluso la forma en que ves la vida.",
-      "",
       "Y me encanta poder decir...",
       "",
       "# Yo estuve ahí para verlo."
@@ -199,19 +193,18 @@ window.TEXTOS = {
     relato: [
       "# Gracias.",
       "Por estos 7 años.",
-      "[foto 1]",
       "Por las risas.",
       "Por las aventuras.",
       "Por las conversaciones.",
       "Por las discusiones que nos hicieron aprender.",
       "Por los días buenos.",
       "Y también por los días que no lo fueron tanto.",
-      "[foto 2]",
+      "",
       "Gracias por dejarme conocer tantas versiones de ti.",
       "Por permitirme acompañarte mientras crecías.",
       "",
       "~ Y por dejarme formar parte de tu historia.",
-      "[foto 3]"
+      "[foto 1]"
     ]
   },
 
@@ -227,7 +220,7 @@ window.TEXTOS = {
     antes: "Pero todavía falta algo...",
     pista: "ábrelo",
     etiqueta: "para ti",
-    pie: "mi foto favorita de nosotros",
+    pie: "mi foto favorita de ti",
     frase: "Si algún día se te olvida lo mucho que te quiero, vuelve a esta foto."
   },
 

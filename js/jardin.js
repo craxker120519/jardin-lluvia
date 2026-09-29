@@ -37,8 +37,44 @@
 
   /* ============ 1. Fotos ============ */
 
+  // Ilustraciones de los conejitos que pueden usarse en lugar de una foto
+  function dibujoHTML(nombre) {
+    const conejos = (sep, flor, escala, al_lado = false) => {
+      const tulipan = `<svg class="d-flor" viewBox="0 0 60 160" style="${colorVars(flor)}--f:${escala}"><use href="#tulipan"/></svg>`;
+      return `<div class="dibujo" style="--sep:${sep}">
+        <svg class="d-conejo" viewBox="0 0 130 150"><use href="#ella"/></svg>
+        ${al_lado ? '' : tulipan}
+        <svg class="d-conejo espejo" viewBox="0 0 130 150"><use href="#el"/></svg>
+        ${al_lado ? tulipan : ''}
+      </div>`;
+    };
+    const anio = /^anio-(\d+)$/.exec(nombre);
+    if (anio) {
+      const n = Number(anio[1]);
+      const colores = ['blanco', 'crema', 'durazno', 'lila', 'rosa', 'crema', 'rosa'];
+      return conejos((26 - n * 3.5) + '%', colores[(n - 1) % 7], (.5 + n * .07).toFixed(2));
+    }
+    const fijos = {
+      'pareja':     () => conejos('0%', 'rosa', 1, true),
+      'comienzo-1': () => conejos('24%', 'blanco', .45),
+      'comienzo-2': () => conejos('9%', 'crema', .7),
+      'comienzo-3': () => conejos('0%', 'rosa', 1, true)
+    };
+    if (fijos[nombre]) return fijos[nombre]();
+    if (['perro', 'gato', 'pajarito', 'ella', 'el'].includes(nombre)) {
+      const vista = nombre === 'pajarito' ? '0 0 60 50' : '0 0 130 150';
+      return `<div class="dibujo solo"><svg class="d-conejo" viewBox="${vista}"><use href="#${nombre}"/></svg></div>`;
+    }
+    return '';
+  }
+
   function ponerFoto(contenedor, src, alt = '', alFaltar = null) {
     contenedor.classList.add('foto');
+    if (src && src.startsWith('dibujo:')) {
+      contenedor.classList.add('dibujo-animal', 'con-dibujo');
+      contenedor.innerHTML = dibujoHTML(src.slice(7));
+      return;
+    }
     if (!src) { contenedor.classList.add('sin-foto'); contenedor.dataset.archivo = '(sin archivo)'; if (alFaltar) alFaltar(); return; }
     const img = new Image();
     img.alt = alt;
@@ -250,7 +286,8 @@
     const etiqueta = $('.etiqueta-anio', el);
     etiqueta.textContent = texto(a.etiqueta);
     if (a.anio) { const s = document.createElement('small'); s.textContent = texto(a.anio); etiqueta.appendChild(s); }
-    el.appendChild(crearPolaroid(a.foto, '', { cinta: false }));
+    if (a.foto) el.appendChild(crearPolaroid(a.foto, '', { cinta: false }));
+    else el.classList.add('solo-texto');
     if (a.texto) { const p = document.createElement('p'); p.className = 'texto-anio'; p.textContent = texto(a.texto); el.appendChild(p); }
     lineaTiempo.appendChild(el);
   });
@@ -271,11 +308,20 @@
     pieza.className = 'pieza revelar';
     pieza.dataset.anim = ['giro', 'zoom', 'izq', 'der', 'zoom', 'giro'][i % 6];
     pieza.style.transitionDelay = (i % 2) * .25 + 's';
-    const pol = crearPolaroid(b.foto, b.texto, { giro: girosCollage[i % girosCollage.length] });
-    hacerTocable(pol, 'Abrir recuerdo', () => abrirVisor({
-      fotos: [b.foto], titulo: b.texto, detalle: b.detalle || '', origen: pol, pequeño: true
-    }));
-    pieza.appendChild(pol);
+    if (b.foto) {
+      const pol = crearPolaroid(b.foto, b.texto, { giro: girosCollage[i % girosCollage.length] });
+      hacerTocable(pol, 'Abrir recuerdo', () => abrirVisor({
+        fotos: [b.foto], titulo: b.texto, detalle: b.detalle || '', origen: pol
+      }));
+      pieza.appendChild(pol);
+    } else {
+      const nota = document.createElement('div');
+      nota.className = 'notita';
+      nota.style.setProperty('--giro', girosCollage[i % girosCollage.length] + 'deg');
+      nota.innerHTML = `<span class="cinta${i % 2 ? ' salvia' : ''}"></span><p></p>`;
+      $('p', nota).textContent = texto(b.texto);
+      pieza.appendChild(nota);
+    }
     if (i % 3 === 1) {
       const c = NOMBRES_COLOR[(i + 2) % NOMBRES_COLOR.length];
       pieza.insertAdjacentHTML('beforeend',
@@ -342,7 +388,7 @@
     const pol = crearPolaroid(null, '', { giro: i % 2 ? 2.4 : -2.4 });
     const foto = $('.foto', pol);
     foto.classList.remove('sin-foto');
-    ponerFoto(foto, a.foto, a.texto, () => {
+    ponerFoto(foto, a.foto || '', a.texto, () => {
       // Si todavía no hay foto, aparece una ilustración del animalito
       pol.classList.add('ilustracion');
       foto.className = 'foto dibujo-animal';

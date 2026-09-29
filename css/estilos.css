@@ -1171,6 +1171,55 @@ svg.espejo { transform: scaleX(-1); }
 }
 .volver.ver { opacity: 1; }
 
+/* ================= Ilustraciones en lugar de fotos ================= */
+
+.foto.con-dibujo { aspect-ratio: 4 / 5; padding: 0; display: block; position: relative; }
+.dibujo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: var(--sep, 0%);
+  padding: 0 8% 17%;
+}
+.dibujo::after {
+  content: "";
+  position: absolute;
+  left: 10%; right: 10%; bottom: 15%;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(143, 163, 127, .25);
+  z-index: 0;
+}
+.dibujo .d-conejo { position: relative; z-index: 1; width: 30%; height: auto; overflow: visible; flex: none; }
+.dibujo.solo .d-conejo { width: 58%; }
+.dibujo .d-flor { position: relative; z-index: 1; width: calc(12% * var(--f, 1)); height: auto; flex: none; margin: 0 1%; }
+.recuerdo .foto.con-dibujo { filter: none; }
+.pila .polaroid .foto.con-dibujo { aspect-ratio: auto; }
+
+/* Verte crecer: años solo con texto */
+.anio-crecer.solo-texto { margin-bottom: clamp(44px, 8vh, 70px); }
+.anio-crecer.solo-texto .texto-anio { font-size: clamp(1.4rem, 5.2vw, 1.8rem); margin-top: .3rem; }
+
+/* Lo bonito: notitas de papel */
+.notita {
+  position: relative;
+  padding: 26px 16px 20px;
+  background: var(--blanco) var(--grano);
+  box-shadow: var(--sombra-papel);
+  transform: rotate(var(--giro));
+  background-image: var(--grano), repeating-linear-gradient(180deg, transparent 0 1.7rem, rgba(191, 160, 136, .22) 1.7rem calc(1.7rem + 1px));
+}
+.notita p {
+  font-family: var(--f-mano);
+  font-size: clamp(1.2rem, 4.3vw, 1.45rem);
+  line-height: 1.7rem;
+  text-align: center;
+  color: var(--tinta);
+}
+.collage .pieza:has(.notita) { align-self: start; }
+
 /* ================= Animalitos ================= */
 
 .animalito {
