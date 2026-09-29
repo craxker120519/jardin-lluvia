@@ -2,183 +2,503 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Para ti ❤</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Un pequeño jardín para ti</title>
+  <meta name="description" content="Un pequeño jardín para Lluvia.">
+  <meta name="theme-color" content="#f8e4e2">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌷</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Lora:ital@0;1&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg1: #ffe4ec;
-      --bg2: #ffc2d4;
-      --sobre: #e85d75;
-      --sobre-oscuro: #c9435c;
-      --papel: #fffaf3;
-      --tinta: #4a2c2a;
-      --acento: #d63a5a;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      min-height: 100vh;
-      background: linear-gradient(160deg, var(--bg1), var(--bg2));
-      font-family: 'Lora', Georgia, serif;
-      color: var(--tinta);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow-x: hidden;
-      padding: 16px;
-    }
-
-    /* Corazones flotando */
-    .corazon {
-      position: fixed;
-      bottom: -40px;
-      color: var(--acento);
-      opacity: .6;
-      pointer-events: none;
-      animation: subir linear forwards;
-      z-index: 0;
-    }
-    @keyframes subir {
-      to { transform: translateY(-110vh) rotate(25deg); opacity: 0; }
-    }
-
-    /* Sobre */
-    .escena { position: relative; z-index: 1; text-align: center; }
-    .sobre {
-      position: relative;
-      width: min(320px, 85vw);
-      aspect-ratio: 3 / 2;
-      background: var(--sobre);
-      border-radius: 6px;
-      cursor: pointer;
-      box-shadow: 0 15px 35px rgba(150, 30, 60, .3);
-      transition: transform .3s;
-      margin: 0 auto;
-    }
-    .sobre:hover { transform: translateY(-4px) scale(1.02); }
-    .sobre::before {  /* solapa */
-      content: "";
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 60%;
-      background: var(--sobre-oscuro);
-      clip-path: polygon(0 0, 100% 0, 50% 100%);
-      border-radius: 6px 6px 0 0;
-      transform-origin: top;
-      transition: transform .6s ease;
-    }
-    .sobre.abierto::before { transform: rotateX(180deg); }
-    .sello {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 2.6rem;
-      z-index: 2;
-      transition: opacity .3s;
-    }
-    .sobre.abierto .sello { opacity: 0; }
-    .pista {
-      margin-top: 1.4rem;
-      font-family: 'Dancing Script', cursive;
-      font-size: 1.6rem;
-      color: var(--sobre-oscuro);
-      animation: latido 1.6s infinite;
-    }
-    @keyframes latido { 50% { transform: scale(1.06); } }
-
-    /* Carta */
-    .carta {
-      position: relative;
-      z-index: 1;
-      display: none;
-      width: min(640px, 100%);
-      background: var(--papel);
-      padding: clamp(28px, 6vw, 56px);
-      border-radius: 10px;
-      box-shadow: 0 20px 50px rgba(150, 30, 60, .25);
-      line-height: 1.8;
-      font-size: 1.08rem;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 1s ease, transform 1s ease;
-    }
-    .carta.visible { opacity: 1; transform: none; }
-    .carta h1 {
-      font-family: 'Dancing Script', cursive;
-      font-size: clamp(2.2rem, 7vw, 3rem);
-      color: var(--acento);
-      margin-bottom: 1.2rem;
-    }
-    .carta p { margin-bottom: 1.1rem; }
-    .firma {
-      font-family: 'Dancing Script', cursive;
-      font-size: 1.8rem;
-      text-align: right;
-      color: var(--acento);
-      margin-top: 2rem;
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Nunito:wght@300;400;500;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
 </head>
-<body>
+<body class="bloqueado">
 
-  <div class="escena" id="escena">
-    <div class="sobre" id="sobre" role="button" aria-label="Abrir la carta" tabindex="0">
-      <span class="sello">💌</span>
+  <!-- =========================================================
+       Ilustraciones reutilizables (tulipanes y los dos conejitos)
+       ========================================================= -->
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="tulipan" viewBox="0 0 60 160">
+        <path d="M30 158 C31 128 28 98 30 58" fill="none" stroke-width="3" stroke-linecap="round" style="stroke:var(--t-tallo,#9fb28f)"/>
+        <path d="M30 152 C13 140 7 113 11 92 C20 108 28 124 31 142 Z" style="fill:var(--t-hoja,#b5c6a5)"/>
+        <path d="M30 157 C45 141 51 119 47 100 C40 114 33 129 29 147 Z" style="fill:var(--t-hoja-osc,#9fb28f)"/>
+        <path d="M18 54 C13 38 20 19 30 11 C40 19 47 38 42 54 C37 61 23 61 18 54 Z" style="fill:var(--t-osc,#e5a5af)"/>
+        <path d="M13 25 C10 45 17 62 30 62 C43 62 50 45 47 25 C42 33 37 37 32 35 C28 37 19 35 13 25 Z" style="fill:var(--t-flor,#f3c3ca)"/>
+        <path d="M23 41 C22 27 26 17 30 12 C34 17 38 27 37 41 C35 49 25 49 23 41 Z" style="fill:var(--t-luz,#fbe1e4)" opacity=".9"/>
+      </symbol>
+
+      <!-- Base del conejito (sentado, mirando a la derecha) -->
+      <symbol id="conejo" viewBox="0 0 130 150">
+        <g stroke="#bb9d86" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M71 60 C60 42 57 15 65 6 C73 -1 80 17 81 34 C81 45 79 53 77 60 Z" style="fill:var(--pelo-sombra,#f3e6d8)"/>
+          <circle cx="21" cy="113" r="11" style="fill:var(--pelo,#fffaf3)"/>
+          <path d="M30 139 C17 121 19 89 44 77 C62 68 85 77 93 93 C101 109 101 129 93 139 Z" style="fill:var(--pelo,#fffaf3)"/>
+          <path d="M27 137 C23 119 34 105 52 107 C67 109 71 125 64 139 Z" style="fill:var(--pelo,#fffaf3)"/>
+          <path d="M23 140 C30 134 58 133 66 140 C58 145 32 145 23 140 Z" style="fill:var(--pelo,#fffaf3)"/>
+          <path d="M67 71 C65 53 79 43 96 44 C113 46 121 58 119 71 C117 83 105 89 92 89 C78 89 69 83 67 71 Z" style="fill:var(--pelo,#fffaf3)"/>
+          <path d="M83 51 C76 31 78 8 88 3 C98 -1 101 18 97 35 C95 43 93 49 91 53 Z" style="fill:var(--pelo,#fffaf3)"/>
+          <path d="M84 139 C82 127 86 117 92 117 C99 119 99 131 97 139 Z" style="fill:var(--pelo,#fffaf3)"/>
+        </g>
+        <path d="M87 45 C83 31 85 14 89 9 C94 11 95 25 92 37 Z" style="fill:var(--oreja,#f6cdd2)"/>
+        <ellipse class="ojo" cx="102" cy="63" rx="3.1" ry="3.7" fill="#5b4038"/>
+        <circle cx="103.2" cy="61.6" r="1.05" fill="#fff"/>
+        <path d="M98.5 59.5 l-2.4 -1.8 M100.4 58.4 l-1.2 -2.3" stroke="#5b4038" stroke-width="1" stroke-linecap="round"/>
+        <path d="M117.5 65.5 q2.2 1.6 0 3.6 q-2.6 -1.6 0 -3.6z" fill="#e5a3ad"/>
+        <path d="M116 71.5 q-1.8 2.2 -4.4 1.2" fill="none" stroke="#bb9d86" stroke-width="1.2" stroke-linecap="round"/>
+        <ellipse cx="106" cy="74" rx="5.6" ry="3.1" fill="#f5bfc7" opacity=".7"/>
+      </symbol>
+
+      <!-- ÉL: conejito color crema -->
+      <symbol id="el" viewBox="0 0 130 150">
+        <use href="#conejo" style="--pelo:#fffaf3;--pelo-sombra:#f1e4d6;--oreja:#f4d0d4"/>
+      </symbol>
+
+      <!-- ELLA: conejita color arena rosado, con una florecita en la oreja -->
+      <symbol id="ella" viewBox="0 0 130 150">
+        <use href="#conejo" style="--pelo:#f8ebe2;--pelo-sombra:#eedbcf;--oreja:#f2c2ca"/>
+        <g transform="translate(98 47)">
+          <path d="M-2 3 C-7 6 -9 10 -8 12 C-5 11 -2 8 -1 4Z" fill="#b5c6a5"/>
+          <circle cx="0" cy="-4" r="3.1" fill="#eeb0ba"/>
+          <circle cx="3.8" cy="-1.2" r="3.1" fill="#eeb0ba"/>
+          <circle cx="2.4" cy="3.2" r="3.1" fill="#eeb0ba"/>
+          <circle cx="-2.4" cy="3.2" r="3.1" fill="#eeb0ba"/>
+          <circle cx="-3.8" cy="-1.2" r="3.1" fill="#eeb0ba"/>
+          <circle cx="0" cy="0" r="2" fill="#fbeedd"/>
+        </g>
+      </symbol>
+
+      <!-- Él sosteniendo un tulipán -->
+      <symbol id="el-flor" viewBox="0 0 130 150">
+        <use href="#el"/>
+        <use href="#tulipan" x="88" y="78" width="24" height="64" transform="rotate(-12 100 140)"/>
+        <path d="M86 128 C86 122 92 120 96 124 C99 128 96 133 90 133 Z" fill="#fffaf3" stroke="#bb9d86" stroke-width="1.4"/>
+      </symbol>
+
+      <!-- Ella sosteniendo un tulipán -->
+      <symbol id="ella-flor" viewBox="0 0 130 150">
+        <use href="#ella"/>
+        <use href="#tulipan" x="88" y="78" width="24" height="64" transform="rotate(-12 100 140)" style="--t-flor:#fbeedd;--t-osc:#ebd3b9;--t-luz:#fff8ef"/>
+        <path d="M86 128 C86 122 92 120 96 124 C99 128 96 133 90 133 Z" fill="#f8ebe2" stroke="#bb9d86" stroke-width="1.4"/>
+      </symbol>
+
+      <!-- Perrito (negro y esponjoso, como el de Lluvia), mirando a la derecha -->
+      <symbol id="perro" viewBox="0 0 130 150">
+        <g stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" style="stroke:var(--perro-linea,#7a6964);fill:var(--perro,#5f5352)">
+          <path d="M26 112 C12 106 8 90 14 82 C20 84 22 96 34 104 Z"/>
+          <path d="M30 140 C20 120 24 94 46 84 C64 76 84 84 90 100 C96 116 96 132 90 140 Z"/>
+          <path d="M28 138 C24 122 34 108 50 110 C64 112 68 126 62 140 Z"/>
+          <path d="M22 140 C30 134 58 133 66 140 C58 145 30 145 22 140 Z"/>
+          <path d="M76 140 C74 124 76 110 82 108 C88 110 90 124 88 140 Z"/>
+          <path d="M86 140 C86 126 88 114 93 112 C98 116 98 128 97 140 Z"/>
+          <path d="M66 70 C64 50 78 38 94 38 C110 38 120 50 118 64 C117 78 106 86 92 86 C78 86 68 82 66 70 Z"/>
+          <path d="M106 64 C114 60 125 64 125 71 C125 79 114 81 105 77 Z"/>
+          <path d="M80 44 C68 42 60 56 63 74 C66 82 76 80 80 70 C83 60 86 48 80 44 Z" style="fill:var(--perro-sombra,#4e4342)"/>
+        </g>
+        <path d="M82 86 C89 93 100 93 108 85" fill="none" stroke="#eeb0ba" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="95" cy="92.5" r="2.4" fill="#f3d9a8"/>
+        <ellipse class="ojo" cx="100" cy="57" rx="3.3" ry="3.8" fill="#241c1b"/>
+        <circle cx="101.3" cy="55.5" r="1.2" fill="#fff"/>
+        <ellipse cx="123" cy="68" rx="3.2" ry="2.6" fill="#241c1b"/>
+        <path d="M121 74.5 q-3 3 -7 1" fill="none" stroke="#8d7a74" stroke-width="1.2" stroke-linecap="round"/>
+        <ellipse cx="107" cy="73" rx="5" ry="2.8" fill="#f0a9b4" opacity=".5"/>
+      </symbol>
+
+      <!-- Gatito, mirando a la derecha -->
+      <symbol id="gato" viewBox="0 0 130 150">
+        <g stroke="#bb9d86" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" style="fill:var(--gato,#f2e7dd)">
+          <path d="M34 134 C10 136 2 116 12 102 C16 98 20 100 18 106 C14 118 22 128 36 126 Z"/>
+          <path d="M36 140 C26 118 32 92 52 84 C68 78 84 86 88 102 C92 118 92 132 88 140 Z"/>
+          <path d="M34 138 C30 122 40 110 54 112 C66 114 70 128 64 140 Z"/>
+          <path d="M28 140 C36 134 60 134 68 140 C60 145 36 145 28 140 Z"/>
+          <path d="M76 140 C74 124 76 112 82 110 C88 112 90 124 88 140 Z"/>
+          <path d="M93 47 L103 25 L111 51 Z" style="fill:var(--gato-sombra,#e6d7ca)"/>
+          <path d="M64 70 C62 54 74 44 90 44 C106 44 116 54 114 70 C112 82 102 88 89 88 C76 88 66 82 64 70 Z"/>
+          <path d="M70 55 L70 30 L87 46 Z"/>
+        </g>
+        <path d="M73 49 L73.5 37 L82 46 Z" fill="#f4cdd2"/>
+        <path d="M84 47 v6 M90 46 v5 M78 50 v5" stroke="#d6c1b0" stroke-width="1.5" stroke-linecap="round"/>
+        <ellipse class="ojo" cx="100" cy="64" rx="2.8" ry="3.6" fill="#5b4038"/>
+        <circle cx="101" cy="62.6" r="1" fill="#fff"/>
+        <path d="M110.5 70 h3.6 l-1.8 2.4 z" fill="#e5a3ad"/>
+        <path d="M112.3 72.6 q-.8 2.6 -3.6 2.2" fill="none" stroke="#bb9d86" stroke-width="1.1" stroke-linecap="round"/>
+        <path d="M114 74 l12 -2.5 M114 77 l11 2" stroke="#cdb8a8" stroke-width=".9" stroke-linecap="round"/>
+        <ellipse cx="104" cy="75" rx="5" ry="2.8" fill="#f5bfc7" opacity=".7"/>
+      </symbol>
+
+      <!-- Pajarito, mirando a la derecha -->
+      <symbol id="pajarito" viewBox="0 0 60 50">
+        <g stroke="#bb9d86" stroke-width="1.3" stroke-linejoin="round">
+          <path d="M14 30 L2 25 L4 35 Z" fill="#eebcb9"/>
+          <path d="M12 30 C12 20 22 14 32 16 C38 10 48 10 52 18 C55 24 52 32 46 36 C40 42 22 44 14 38 Z" fill="#f6d5d0"/>
+          <path d="M20 28 C24 22 34 22 38 28 C34 34 26 36 20 28 Z" fill="#eebcb9"/>
+        </g>
+        <path d="M52 18.5 L58.5 21 L52 23.5 Z" fill="#e8c38e"/>
+        <circle class="ojo" cx="46" cy="19" r="1.9" fill="#5b4038"/>
+        <ellipse cx="46.5" cy="25" rx="2.6" ry="1.5" fill="#f2aeb8" opacity=".7"/>
+        <path d="M28 41 v6 M34 41 v6" stroke="#bb9d86" stroke-width="1.2" stroke-linecap="round"/>
+      </symbol>
+
+      <symbol id="petalo" viewBox="0 0 20 26">
+        <path d="M10 1 C17 6 19 15 14 22 C12 25 8 25 6 22 C1 15 3 6 10 1Z" style="fill:var(--p,#f4c7cd)"/>
+        <path d="M10 5 C10 11 10 16 10 21" stroke="#fff" stroke-opacity=".45" fill="none"/>
+      </symbol>
+
+      <symbol id="mariposa" viewBox="0 0 40 32">
+        <path d="M20 16 C12 2 2 2 3 10 C4 16 12 17 20 16Z" style="fill:var(--m,#f3d2d8)"/>
+        <path d="M20 16 C28 2 38 2 37 10 C36 16 28 17 20 16Z" style="fill:var(--m,#f3d2d8)"/>
+        <path d="M20 17 C13 20 8 28 12 30 C16 31 19 24 20 17Z" style="fill:var(--m2,#ebbcc4)"/>
+        <path d="M20 17 C27 20 32 28 28 30 C24 31 21 24 20 17Z" style="fill:var(--m2,#ebbcc4)"/>
+        <path d="M20 9 V25" stroke="#8a6b5a" stroke-width="1.4" stroke-linecap="round"/>
+      </symbol>
+
+      <symbol id="huella" viewBox="0 0 24 26">
+        <ellipse cx="12" cy="18" rx="5.2" ry="6.4"/>
+        <ellipse cx="5.5" cy="8.5" rx="2.4" ry="3.2" transform="rotate(-18 5.5 8.5)"/>
+        <ellipse cx="12" cy="5" rx="2.5" ry="3.4"/>
+        <ellipse cx="18.5" cy="8.5" rx="2.4" ry="3.2" transform="rotate(18 18.5 8.5)"/>
+      </symbol>
+
+      <symbol id="hojita" viewBox="0 0 20 12">
+        <path d="M0 6 C5 0 14 0 20 6 C14 12 5 12 0 6Z" fill="#b5c6a5"/>
+        <path d="M2 6 H17" stroke="#9fb28f" stroke-width=".8"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="velo" id="velo" aria-hidden="true"></div>
+  <div class="efectos" id="efectos" aria-hidden="true"></div>
+
+
+  <!-- ===================== 01 · PORTADA ===================== -->
+  <section class="portada ambiente" id="portada">
+    <div class="capa-luces" data-luces="14"></div>
+    <div class="capa-petalos" data-petalos="12"></div>
+
+    <div class="portada-contenido">
+      <div id="portada-lineas"></div>
+      <button class="linea boton-entrar" id="entrar" type="button" data-text="portada.boton"></button>
     </div>
-    <p class="pista">Ábreme ❤</p>
-  </div>
 
-  <main class="carta" id="carta">
-    <!-- ✏️ EDITA AQUÍ TU CARTA -->
-    <h1>Mi amor,</h1>
+    <div class="marco-tulipanes izq" data-ramo="izq"></div>
+    <div class="marco-tulipanes der" data-ramo="der"></div>
+    <div class="conejo conejo-portada" style="--w:clamp(92px,24vw,150px)">
+      <svg viewBox="0 0 130 150"><use href="#el-flor"/></svg>
+    </div>
+    <div class="animalito ave portada-ave" data-animal="pajarito" style="--w:30px;left:calc(50% + 70px);bottom:30px"></div>
+    <div class="pasto" data-pasto="1"></div>
+  </section>
 
-    <p>
-      Escribe aquí el primer párrafo de tu carta. Puedes contarle cómo te sentiste
-      la primera vez que la viste, o lo que más te gusta de ella.
-    </p>
+  <main class="historia">
 
-    <p>
-      Aquí va otro párrafo. Agrega o borra párrafos copiando las etiquetas
-      &lt;p&gt; ... &lt;/p&gt;.
-    </p>
+    <!-- ===================== 02 · INTRODUCCIÓN ===================== -->
+    <section class="seccion introduccion" id="introduccion">
+      <div class="relato" data-relato="introduccion.relato" data-fotos="introduccion"></div>
+    </section>
 
-    <p>
-      Y un último párrafo para cerrar con algo bonito.
-    </p>
+    <!-- ===================== 03 · CAPÍTULO I ===================== -->
+    <section class="seccion comienzo" id="comienzo">
+      <header class="cabecera revelar">
+        <p class="capitulo" data-text="comienzo.capitulo"></p>
+        <h2 class="titulo" data-text="comienzo.titulo"></h2>
+      </header>
+      <div class="relato" data-relato="comienzo.relato"></div>
+      <div class="album" id="album">
+        <svg class="enredadera" id="enredadera" aria-hidden="true"><path/><g class="hojas"></g></svg>
+      </div>
+      <div class="huellitas"></div>
+      <div class="animalito" data-animal="gato" data-espejo style="--w:clamp(56px,15vw,78px);right:10%;bottom:60px"></div>
+    </section>
 
-    <p class="firma">Con todo mi amor,<br>Tu nombre</p>
-    <!-- ✏️ FIN DE LA CARTA -->
+    <!-- ===================== 04 · CAPÍTULO II · VERTE CRECER ===================== -->
+    <section class="seccion crecer" id="crecer">
+      <header class="cabecera revelar">
+        <p class="capitulo" data-text="crecer.capitulo"></p>
+        <h2 class="titulo" data-text="crecer.titulo"></h2>
+      </header>
+      <div class="relato" data-relato="crecer.antes"></div>
+      <div class="linea-tiempo" id="linea-tiempo">
+        <span class="tallo"></span>
+        <div class="animalito ave" data-animal="pajarito" style="--w:28px;left:18px;bottom:-12px"></div>
+        <div class="conejo llega" style="--w:clamp(64px,16vw,96px);left:-6px;top:-78px;--retraso:.2s">
+          <svg viewBox="0 0 130 150"><use href="#ella"/></svg>
+        </div>
+      </div>
+      <div class="relato" data-relato="crecer.despues"></div>
+    </section>
+
+    <!-- ===================== 05 · LOS DÍAS DIFÍCILES ===================== -->
+    <section class="seccion dificiles" id="dificiles">
+      <header class="cabecera revelar">
+        <p class="capitulo" data-text="dificiles.capitulo"></p>
+        <h2 class="titulo" data-text="dificiles.titulo"></h2>
+      </header>
+      <div class="relato lento" data-relato="dificiles.relato"></div>
+
+      <!-- Escena: se coloca donde diga [escena] en textos.js -->
+      <div class="bloque escena-dificil" id="bloque-escena">
+        <svg class="tulipan-caido" viewBox="0 0 60 160" aria-hidden="true"><use href="#tulipan"/></svg>
+        <div class="conejo-quieto ella"><svg viewBox="0 0 130 150"><use href="#ella"/></svg></div>
+        <div class="conejo-quieto el"><svg viewBox="0 0 130 150" class="espejo"><use href="#el"/></svg></div>
+      </div>
+    </section>
+
+    <!-- ===================== 06 · LO BONITO ===================== -->
+    <section class="seccion bonitos" id="bonitos">
+      <header class="cabecera revelar">
+        <p class="capitulo" data-text="bonitos.capitulo"></p>
+        <h2 class="titulo" data-text="bonitos.titulo"></h2>
+      </header>
+      <div class="relato" data-relato="bonitos.relato"></div>
+      <div class="collage" id="collage"></div>
+      <div class="animalito" data-animal="perro" style="--w:clamp(60px,17vw,86px);left:5%;bottom:34px"></div>
+    </section>
+
+    <!-- ===================== 07 · TÚ ===================== -->
+    <section class="seccion tu" id="tu">
+      <header class="cabecera revelar">
+        <p class="capitulo" data-text="tu.capitulo"></p>
+        <h2 class="titulo" data-text="tu.titulo"></h2>
+      </header>
+      <div class="relato" data-relato="tu.antes"></div>
+      <div class="versiones" id="versiones">
+        <div class="versiones-foto">
+          <div class="pila" id="pila"></div>
+        </div>
+        <div class="versiones-lista" id="versiones-lista"></div>
+      </div>
+      <div class="relato" data-relato="tu.despues"></div>
+    </section>
+
+    <!-- ===================== INTERLUDIO · SU AMOR POR LOS ANIMALES ===================== -->
+    <section class="seccion animales ambiente" id="animales">
+      <div class="relato" data-relato="animales.relato"></div>
+
+      <!-- Escena: se coloca donde diga [animales] en textos.js -->
+      <div class="bloque escena-animales" id="bloque-animales">
+        <svg class="tulipan t1" viewBox="0 0 60 160" aria-hidden="true"><use href="#tulipan"/></svg>
+        <svg class="tulipan t2" viewBox="0 0 60 160" aria-hidden="true" style="--t-flor:#fbeedd;--t-osc:#ebd3b9;--t-luz:#fff8ef"><use href="#tulipan"/></svg>
+        <div class="gato-escena"><svg viewBox="0 0 130 150" class="espejo"><use href="#gato"/></svg></div>
+        <div class="ella-escena"><svg viewBox="0 0 130 150"><use href="#ella"/></svg></div>
+        <div class="ave-escena"><svg viewBox="0 0 60 50"><use href="#pajarito"/></svg></div>
+        <div class="perro-escena"><svg viewBox="0 0 130 150" class="espejo"><use href="#perro"/></svg></div>
+      </div>
+
+      <header class="cabecera revelar">
+        <h2 class="titulo" data-text="animales.titulo"></h2>
+      </header>
+      <div class="corazon-tuyo" id="corazon-tuyo"></div>
+    </section>
+
+    <!-- ===================== 08 · LOS 7 AÑOS ===================== -->
+    <section class="seccion siete ambiente" id="siete">
+      <header class="cabecera revelar">
+        <p class="capitulo" data-text="siete.capitulo"></p>
+        <h2 class="titulo" data-text="siete.titulo"></h2>
+        <p class="subtitulo" data-text="siete.intro"></p>
+      </header>
+      <div class="jardin-siete revelar">
+        <div class="fila-siete" id="fila-siete"></div>
+        <div class="animalito" data-animal="gato" data-espejo style="--w:clamp(46px,12vw,66px);right:-3%;bottom:52px;z-index:8"></div>
+        <div class="pasto" data-pasto="4"></div>
+      </div>
+      <p class="pista" id="pista-siete" data-text="siete.pista"></p>
+      <p class="contador" id="contador-siete"></p>
+    </section>
+
+    <!-- ===================== 09 · LOS 24 AÑOS ===================== -->
+    <section class="seccion veinticuatro" id="veinticuatro">
+      <div class="escena-24" id="escena-24">
+        <p class="numero-24" id="numero-24"></p>
+      </div>
+      <div class="relato" data-relato="veinticuatro.relato"></div>
+      <div class="macizo-24" id="macizo-24"></div>
+    </section>
+
+    <!-- ===================== 10 · GRACIAS ===================== -->
+    <section class="seccion gracias" id="gracias">
+      <div class="relato" data-relato="gracias.relato" data-fotos="gracias"></div>
+      <div class="huellitas claras"></div>
+    </section>
+
+    <!-- ===================== 11 · EL PASTEL ===================== -->
+    <section class="seccion pastel" id="pastel">
+      <div class="guirnalda" id="guirnalda"></div>
+      <div class="lineas-pastel" id="lineas-pastel"></div>
+
+      <div class="pastel-escena revelar">
+        <div class="conejo-quieto a-la-izq"><svg viewBox="0 0 130 150"><use href="#ella"/></svg></div>
+        <button class="pastel-boton" id="soplar" type="button" aria-label="Soplar las velas">
+          <svg class="pastel-svg" viewBox="0 0 300 320" aria-hidden="true">
+            <defs>
+              <radialGradient id="g-llama" cx=".5" cy=".75" r=".7">
+                <stop offset="0" stop-color="#fffdf0"/>
+                <stop offset=".45" stop-color="#ffe08f"/>
+                <stop offset="1" stop-color="#f3a66a"/>
+              </radialGradient>
+              <radialGradient id="g-halo">
+                <stop offset="0" stop-color="#ffe3a3" stop-opacity=".6"/>
+                <stop offset="1" stop-color="#ffe3a3" stop-opacity="0"/>
+              </radialGradient>
+              <pattern id="rayas" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+                <rect width="7" height="7" fill="#fffaf3"/>
+                <rect width="2.6" height="7" fill="#f2c5cb"/>
+              </pattern>
+            </defs>
+            <ellipse cx="150" cy="300" rx="134" ry="14" fill="#d9c6b6"/>
+            <ellipse cx="150" cy="295" rx="126" ry="11" fill="#fffaf3"/>
+            <rect x="46" y="196" width="208" height="98" rx="12" fill="#fbeee4"/>
+            <path fill="#f3c6cc" d="M46 212 V204 Q46 194 58 194 H242 Q254 194 254 204 V214 C250 222 244 222 242 214 C240 232 230 232 228 214 C224 220 218 220 214 212 C212 226 202 226 200 212 C196 218 190 218 186 212 C184 236 172 236 170 212 C166 220 160 220 156 212 C154 228 144 228 142 212 C138 218 132 218 128 212 C126 234 114 234 112 212 C108 220 102 220 98 212 C96 226 86 226 84 212 C80 218 74 218 70 212 C68 230 58 230 56 212 C52 220 48 218 46 212 Z"/>
+            <g id="flores-pastel"></g>
+            <rect x="80" y="120" width="140" height="80" rx="10" fill="#fffaf3"/>
+            <path fill="#f6d6d9" d="M80 136 V128 Q80 118 90 118 H210 Q220 118 220 128 V138 C217 146 211 146 209 138 C207 152 197 152 195 136 C191 142 185 142 182 136 C180 156 168 156 166 136 C162 142 156 142 152 136 C150 150 140 150 138 136 C134 142 128 142 124 136 C122 154 110 154 108 136 C104 142 98 142 95 136 C93 148 85 148 83 136 Z"/>
+            <g id="perlas"></g>
+            <g id="velas"></g>
+          </svg>
+        </button>
+        <div class="conejo-quieto a-la-der"><svg viewBox="0 0 130 150" class="espejo"><use href="#el"/></svg></div>
+      </div>
+      <p class="pista" data-text="pastel.pista"></p>
+      <h2 class="felicitacion" data-text="pastel.felicitacion"></h2>
+    </section>
+
+    <!-- ===================== 12 · EL REGALO ===================== -->
+    <section class="seccion regalo oculto" id="regalo">
+      <p class="antes revelar" data-text="regalo.antes"></p>
+      <div class="escena-regalo revelar">
+        <div class="conejo llega" style="--w:clamp(76px,20vw,112px);left:-4%;bottom:0;--retraso:.8s">
+          <svg viewBox="0 0 130 150"><use href="#el"/></svg>
+        </div>
+        <div class="animalito" data-animal="perro" data-espejo style="--w:clamp(56px,15vw,78px);right:-8%;bottom:0"></div>
+        <button class="caja" id="caja" type="button" aria-label="Abrir el regalo">
+          <span class="caja-cuerpo"></span>
+          <span class="caja-tapa">
+            <svg class="lazo" viewBox="0 0 80 44" aria-hidden="true">
+              <path d="M40 30 C30 6 6 4 8 22 C10 36 30 34 40 30Z" fill="#fffaf3" stroke="#e6d3c3"/>
+              <path d="M40 30 C50 6 74 4 72 22 C70 36 50 34 40 30Z" fill="#fffaf3" stroke="#e6d3c3"/>
+              <circle cx="40" cy="30" r="6" fill="#fffaf3" stroke="#e6d3c3"/>
+            </svg>
+          </span>
+          <span class="caja-etiqueta" data-text="regalo.etiqueta"></span>
+        </button>
+      </div>
+      <p class="pista" data-text="regalo.pista"></p>
+
+      <div class="sorpresa" id="sorpresa">
+        <figure class="polaroid">
+          <span class="cinta"></span>
+          <div class="foto" data-foto="regalo"></div>
+          <figcaption class="pie" data-text="regalo.pie"></figcaption>
+        </figure>
+        <p class="frase-regalo" data-text="regalo.frase"></p>
+      </div>
+    </section>
+
+    <!-- ===================== 13 · LA CARTA ===================== -->
+    <section class="seccion carta oculto" id="carta">
+      <div class="lineas-carta" id="lineas-carta"></div>
+
+      <div class="sobre-escena revelar" id="sobre-escena">
+        <button class="sobre" id="sobre" type="button" aria-label="Abrir la carta">
+          <span class="sobre-atras"></span>
+          <span class="hoja-mini"></span>
+          <span class="sobre-frente"></span>
+          <span class="sobre-solapa"><span></span></span>
+          <span class="sello"><svg viewBox="0 0 60 160" aria-hidden="true"><use href="#tulipan"/></svg></span>
+          <span class="sobre-para" data-text="carta.destinatario"></span>
+        </button>
+        <p class="pista" id="pista-sobre" data-text="carta.pista"></p>
+      </div>
+
+      <div class="hojas-carta oculto" id="hojas-carta">
+        <article class="papel" id="papel">
+          <span class="cinta"></span>
+          <svg class="tulipan-prensado" viewBox="0 0 60 160" aria-hidden="true"><use href="#tulipan"/></svg>
+          <p class="saludo parrafo" data-text="carta.saludo"></p>
+          <div id="cuerpo-carta"></div>
+          <p class="despedida parrafo" data-text="carta.despedida"></p>
+          <p class="firma parrafo" data-text="carta.firma"></p>
+        </article>
+        <article class="papel segunda" id="papel-2">
+          <span class="cinta"></span>
+          <div id="cuerpo-carta-2"></div>
+        </article>
+        <button class="doblar" id="doblar" type="button" data-text="carta.cerrar"></button>
+      </div>
+    </section>
+
+    <!-- ===================== 14 · FINAL ===================== -->
+    <section class="seccion final ambiente oculto" id="final">
+      <div class="capa-luces" data-luces="12"></div>
+      <div class="capa-petalos" data-petalos="16"></div>
+      <div class="relato" data-relato="final.relato"></div>
+      <div class="macizo" id="macizo-final">
+        <div class="pareja">
+          <div class="amigo perro-final"><svg viewBox="0 0 130 150"><use href="#perro"/></svg></div>
+          <div class="conejo-final"><svg viewBox="0 0 130 150"><use href="#ella-flor"/></svg></div>
+          <div class="conejo-final"><svg viewBox="0 0 130 150" class="espejo"><use href="#el"/></svg></div>
+          <div class="amigo gato-final"><svg viewBox="0 0 130 150" class="espejo"><use href="#gato"/></svg></div>
+          <div class="amigo ave-final"><svg viewBox="0 0 60 50"><use href="#pajarito"/></svg></div>
+        </div>
+        <div class="pasto" data-pasto="3"></div>
+      </div>
+    </section>
+
+    <!-- ===================== 15 · EL OCTAVO TULIPÁN ===================== -->
+    <section class="seccion octavo ambiente oculto" id="octavo">
+      <div class="capa-luces" data-luces="16"></div>
+      <div class="lineas-octavo" id="lineas-octavo"></div>
+
+      <div class="escena-octavo">
+        <div class="fila-ocho" id="fila-ocho">
+          <svg class="capullo" id="capullo" viewBox="0 0 80 200" aria-hidden="true">
+            <path d="M40 198 C41 160 38 122 40 84" fill="none" stroke="#9fb28f" stroke-width="3.4" stroke-linecap="round"/>
+            <path d="M40 190 C22 176 15 146 19 122 C29 140 37 158 41 178 Z" fill="#b5c6a5"/>
+            <path d="M40 196 C58 178 65 152 60 130 C52 148 44 164 39 184 Z" fill="#9fb28f"/>
+            <g class="flor">
+              <path class="p-atras" d="M28 78 C22 58 30 36 40 28 C50 36 58 58 52 78 C47 84 33 84 28 78Z" fill="#e7aab4"/>
+              <path class="p-izq" d="M40 84 C28 84 20 72 20 54 C20 44 26 34 32 30 C34 46 38 64 40 84Z" fill="#f3c3ca"/>
+              <path class="p-der" d="M40 84 C52 84 60 72 60 54 C60 44 54 34 48 30 C46 46 42 64 40 84Z" fill="#f3c3ca"/>
+              <path class="p-centro" d="M32 72 C31 52 35 38 40 30 C45 38 49 52 48 72 C45 80 35 80 32 72Z" fill="#fbe1e4"/>
+            </g>
+          </svg>
+        </div>
+        <div class="ave-octavo" id="ave-octavo"><svg viewBox="0 0 60 50" class="espejo"><use href="#pajarito"/></svg></div>
+        <div class="pareja-pequena">
+          <div><svg viewBox="0 0 130 150"><use href="#ella"/></svg></div>
+          <div><svg viewBox="0 0 130 150"><use href="#el"/></svg></div>
+        </div>
+        <div class="pasto" data-pasto="5"></div>
+      </div>
+
+      <h2 class="te-amo-final" id="te-amo-final" data-text="octavo.final"></h2>
+      <button class="volver" id="volver" type="button" data-text="octavo.volver"></button>
+    </section>
   </main>
 
-  <script>
-    const sobre = document.getElementById('sobre');
-    const escena = document.getElementById('escena');
-    const carta = document.getElementById('carta');
+  <!-- ===================== VISOR DE RECUERDOS ===================== -->
+  <div class="visor" id="visor" role="dialog" aria-modal="true" aria-labelledby="visor-titulo" hidden>
+    <div class="visor-fondo" data-cerrar></div>
+    <div class="visor-contenido">
+      <figure class="polaroid visor-polaroid" id="visor-polaroid">
+        <div class="carrusel" id="carrusel"><div class="pista-fotos" id="pista-fotos"></div></div>
+        <button class="flecha anterior" type="button" aria-label="Foto anterior">‹</button>
+        <button class="flecha siguiente" type="button" aria-label="Foto siguiente">›</button>
+        <div class="puntos" id="puntos"></div>
+      </figure>
+      <div class="visor-texto">
+        <p class="visor-sobre"></p>
+        <h3 id="visor-titulo"></h3>
+        <p class="visor-detalle"></p>
+        <button class="visor-cerrar" type="button" data-cerrar>guardar este recuerdo</button>
+      </div>
+    </div>
+  </div>
 
-    function abrir() {
-      sobre.classList.add('abierto');
-      setTimeout(() => {
-        escena.style.display = 'none';
-        carta.style.display = 'block';
-        requestAnimationFrame(() => carta.classList.add('visible'));
-      }, 700);
-    }
-    sobre.addEventListener('click', abrir);
-    sobre.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') abrir(); });
+  <div class="aviso" id="aviso" role="status"></div>
 
-    function corazon() {
-      const c = document.createElement('span');
-      c.className = 'corazon';
-      c.textContent = ['❤', '💕', '💗', '💖'][Math.floor(Math.random() * 4)];
-      c.style.left = Math.random() * 100 + 'vw';
-      c.style.fontSize = 14 + Math.random() * 22 + 'px';
-      c.style.animationDuration = 6 + Math.random() * 6 + 's';
-      document.body.appendChild(c);
-      setTimeout(() => c.remove(), 12000);
-    }
-    setInterval(corazon, 600);
-  </script>
+  <script src="js/textos.js"></script>
+  <script src="js/fotos.js"></script>
+  <script src="js/jardin.js"></script>
 </body>
 </html>
