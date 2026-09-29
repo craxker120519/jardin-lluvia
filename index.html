@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para ti ❤</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Lora:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg1: #ffe4ec;
+      --bg2: #ffc2d4;
+      --sobre: #e85d75;
+      --sobre-oscuro: #c9435c;
+      --papel: #fffaf3;
+      --tinta: #4a2c2a;
+      --acento: #d63a5a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(160deg, var(--bg1), var(--bg2));
+      font-family: 'Lora', Georgia, serif;
+      color: var(--tinta);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      padding: 16px;
+    }
+
+    /* Corazones flotando */
+    .corazon {
+      position: fixed;
+      bottom: -40px;
+      color: var(--acento);
+      opacity: .6;
+      pointer-events: none;
+      animation: subir linear forwards;
+      z-index: 0;
+    }
+    @keyframes subir {
+      to { transform: translateY(-110vh) rotate(25deg); opacity: 0; }
+    }
+
+    /* Sobre */
+    .escena { position: relative; z-index: 1; text-align: center; }
+    .sobre {
+      position: relative;
+      width: min(320px, 85vw);
+      aspect-ratio: 3 / 2;
+      background: var(--sobre);
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 15px 35px rgba(150, 30, 60, .3);
+      transition: transform .3s;
+      margin: 0 auto;
+    }
+    .sobre:hover { transform: translateY(-4px) scale(1.02); }
+    .sobre::before {  /* solapa */
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 60%;
+      background: var(--sobre-oscuro);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      border-radius: 6px 6px 0 0;
+      transform-origin: top;
+      transition: transform .6s ease;
+    }
+    .sobre.abierto::before { transform: rotateX(180deg); }
+    .sello {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2.6rem;
+      z-index: 2;
+      transition: opacity .3s;
+    }
+    .sobre.abierto .sello { opacity: 0; }
+    .pista {
+      margin-top: 1.4rem;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.6rem;
+      color: var(--sobre-oscuro);
+      animation: latido 1.6s infinite;
+    }
+    @keyframes latido { 50% { transform: scale(1.06); } }
+
+    /* Carta */
+    .carta {
+      position: relative;
+      z-index: 1;
+      display: none;
+      width: min(640px, 100%);
+      background: var(--papel);
+      padding: clamp(28px, 6vw, 56px);
+      border-radius: 10px;
+      box-shadow: 0 20px 50px rgba(150, 30, 60, .25);
+      line-height: 1.8;
+      font-size: 1.08rem;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    .carta.visible { opacity: 1; transform: none; }
+    .carta h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(2.2rem, 7vw, 3rem);
+      color: var(--acento);
+      margin-bottom: 1.2rem;
+    }
+    .carta p { margin-bottom: 1.1rem; }
+    .firma {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.8rem;
+      text-align: right;
+      color: var(--acento);
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="escena" id="escena">
+    <div class="sobre" id="sobre" role="button" aria-label="Abrir la carta" tabindex="0">
+      <span class="sello">💌</span>
+    </div>
+    <p class="pista">Ábreme ❤</p>
+  </div>
+
+  <main class="carta" id="carta">
+    <!-- ✏️ EDITA AQUÍ TU CARTA -->
+    <h1>Mi amor,</h1>
+
+    <p>
+      Escribe aquí el primer párrafo de tu carta. Puedes contarle cómo te sentiste
+      la primera vez que la viste, o lo que más te gusta de ella.
+    </p>
+
+    <p>
+      Aquí va otro párrafo. Agrega o borra párrafos copiando las etiquetas
+      &lt;p&gt; ... &lt;/p&gt;.
+    </p>
+
+    <p>
+      Y un último párrafo para cerrar con algo bonito.
+    </p>
+
+    <p class="firma">Con todo mi amor,<br>Tu nombre</p>
+    <!-- ✏️ FIN DE LA CARTA -->
+  </main>
+
+  <script>
+    const sobre = document.getElementById('sobre');
+    const escena = document.getElementById('escena');
+    const carta = document.getElementById('carta');
+
+    function abrir() {
+      sobre.classList.add('abierto');
+      setTimeout(() => {
+        escena.style.display = 'none';
+        carta.style.display = 'block';
+        requestAnimationFrame(() => carta.classList.add('visible'));
+      }, 700);
+    }
+    sobre.addEventListener('click', abrir);
+    sobre.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') abrir(); });
+
+    function corazon() {
+      const c = document.createElement('span');
+      c.className = 'corazon';
+      c.textContent = ['❤', '💕', '💗', '💖'][Math.floor(Math.random() * 4)];
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.fontSize = 14 + Math.random() * 22 + 'px';
+      c.style.animationDuration = 6 + Math.random() * 6 + 's';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 12000);
+    }
+    setInterval(corazon, 600);
+  </script>
+</body>
+</html>
