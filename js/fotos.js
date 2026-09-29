@@ -40,9 +40,8 @@ window.FOTOS = {
   bonitos: [
     { foto: "images/bonitos_01.jpg", texto: "Una foto que quizá en ese momento no parecía importante.", detalle: "Y ahora significa muchísimo para mí." },
     { foto: "", texto: "Una tarde cualquiera que terminó siendo un recuerdo." },
-    { foto: "", texto: "Una de esas veces que nos reímos hasta que nos dolió la cara." },
+    { foto: "", texto: "Un día cualquiera llega a ser tan importante o tan especial sin imaginarlo." },
     { foto: "", texto: "Un lugar cualquiera, pero contigo." },
-    { foto: "", texto: "Nosotros haciendo cualquier tontería." },
     { foto: "", texto: "Un momento que quisiera volver a vivir." }
   ],
 
